@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 namespace Assets.ProjectHomeWork.Develop.DI
 {
@@ -18,7 +19,9 @@ namespace Assets.ProjectHomeWork.Develop.DI
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException(typeof(T) + " Alredy register");
 
+            //Registration registration = new Registration((DIContainer container) => Creator(container));
             Registration registration = new Registration(container => Creator(container));
+
             _container.Add(typeof(T), registration);
         }
 
