@@ -19,10 +19,12 @@ namespace Assets.ProjectHomeWork.Develop.DI
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException(typeof(T) + " Alredy register");
 
-            //Registration registration = new Registration((DIContainer container) => Creator(container));
-            Registration registration = new Registration(container => Creator(container));
+            Registration registration = new Registration((DIContainer container) => Creator(container));
+            //Registration registration = new Registration(container => Creator(container));
 
-            _container.Add(typeof(T), registration);
+            //public Registration(Func<DIContainer, object> creator) => Creator = creator;
+
+        _container.Add(typeof(T), registration);
         }
 
         public T Resolve<T>()
