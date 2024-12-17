@@ -14,20 +14,19 @@ namespace Assets.ProjectHomeWork.Develop.DI
 
         public DIContainer(DIContainer parent) => _parent = parent;
 
-        public void RegisterAsSingle<T>(Func<DIContainer, T> Creator)
+        public void RegisterAsSingle<T>(Func<DIContainer, T> сreator) //Метод регистрации зависимости
         {
             if (_container.ContainsKey(typeof(T)))
-                throw new InvalidOperationException(typeof(T) + " Alredy register");
+                throw new InvalidOperationException(typeof(T) + " Alredy register"); //Проверяем, не содержится ли уже регистрируемый тип в словаре
 
-            Registration registration = new Registration((DIContainer container) => Creator(container));
-            //Registration registration = new Registration(container => Creator(container));
+            Registration registration = new Registration((DIContainer container) => сreator.Invoke(container));
+            //Registration registration = new Registration(container => creator(container)); // Создаем регистрацию      
 
-            //public Registration(Func<DIContainer, object> creator) => Creator = creator;
-
-        _container.Add(typeof(T), registration);
+            _container.Add(typeof(T), registration); //Добавляем способ регистрации в словарь
+            //_container[typeof(T)] = registration;
         }
 
-        public T Resolve<T>()
+        public T Resolve<T>() //Метод получения зависимости
         {
             if (_requests.Contains(typeof(T)))
                 throw new InvalidOperationException($"Cycle resolve for {typeof(T)}");
@@ -61,7 +60,7 @@ namespace Assets.ProjectHomeWork.Develop.DI
         public class Registration
         {
             public Func<DIContainer, object> Creator { get; }
-            public object Instance { get; set; }
+            public object Instance { get; set; } //Ссылка на созданный сервис
 
             public Registration(object instance) => Instance = instance;
 
