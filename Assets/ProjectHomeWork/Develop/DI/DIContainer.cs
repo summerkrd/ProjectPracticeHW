@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.TextCore.Text;
 
 namespace Assets.ProjectHomeWork.Develop.DI
 {
@@ -19,12 +20,13 @@ namespace Assets.ProjectHomeWork.Develop.DI
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException(typeof(T) + " Alredy register"); //Проверяем, не содержится ли уже регистрируемый тип в словаре
 
-            Registration registration = new Registration((DIContainer container) => сreator.Invoke(container));
-            //Registration registration = new Registration(container => creator(container)); // Создаем регистрацию      
+            //Registration registration = new Registration((DIContainer container) => сreator.Invoke(container));
+            //Registration registration = new Registration(container => сreator(container)); // Создаем регистрацию      
+            Registration registration = new Registration(сreator); // Создаем регистрацию      
 
             _container.Add(typeof(T), registration); //Добавляем способ регистрации в словарь
             //_container[typeof(T)] = registration;
-        }
+        }       
 
         public T Resolve<T>() //Метод получения зависимости
         {
@@ -52,7 +54,7 @@ namespace Assets.ProjectHomeWork.Develop.DI
         private T CreateFrom<T>(Registration registration)
         {
             if (registration.Instance == null && registration.Creator != null)
-                registration.Instance = registration.Creator(this);
+                registration.Instance = registration.Creator/*.Invoke*/(this);
 
             return (T)registration.Instance;
         }
