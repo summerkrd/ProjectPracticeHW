@@ -20,9 +20,8 @@ namespace Assets.ProjectHomeWork.Develop.DI
             if (_container.ContainsKey(typeof(T)))
                 throw new InvalidOperationException(typeof(T) + " Alredy register"); //Проверяем, не содержится ли уже регистрируемый тип в словаре
 
-            //Registration registration = new Registration((DIContainer container) => сreator.Invoke(container));
-            //Registration registration = new Registration(container => сreator(container)); // Создаем регистрацию      
-            Registration registration = new Registration(сreator); // Создаем регистрацию      
+            Registration registration = new Registration((DIContainer container) => сreator.Invoke(container));
+            //Registration registration = new Registration(container => сreator(container)); // Создаем регистрацию                       
 
             _container.Add(typeof(T), registration); //Добавляем способ регистрации в словарь
             //_container[typeof(T)] = registration;
