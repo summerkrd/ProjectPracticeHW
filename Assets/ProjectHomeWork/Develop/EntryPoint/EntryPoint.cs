@@ -1,6 +1,8 @@
 ﻿using Assets.ProjectHomeWork.Develop.CommonServices.AssetsManagment;
 using Assets.ProjectHomeWork.Develop.CommonServices.CoroutinePerformer;
+using Assets.ProjectHomeWork.Develop.CommonServices.LoadingScreen;
 using Assets.ProjectHomeWork.Develop.DI;
+using System;
 using UnityEngine;
 
 namespace Assets.ProjectHomeWork.Develop.EntryPoint
@@ -22,10 +24,12 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             //projectContainer.RegisterAsSingle(c => new ResourcesAssetLoader());
             RegisterResourcesAssetLoader(projectContainer);
             RegisterCoroutinePerformer(projectContainer);
+            RegisterSceneLoader(projectContainer);
 
             //Все регистрации прошли
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
         }
+
 
         private void SetupAppSettings()
         {
@@ -41,9 +45,24 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             container.RegisterAsSingle<ICoroutinePerformer>(c =>
             {
                 ResourcesAssetLoader resourcesAssetLoader = c.Resolve<ResourcesAssetLoader>();
-                CoroutinePerformer coroutinePerformer = resourcesAssetLoader.LoadResource<CoroutinePerformer>("Infrastructure/CoroutinePerformer");
-                return Instantiate(coroutinePerformer);
+
+                CoroutinePerformer coroutinePerformerPrefab = resourcesAssetLoader.LoadResource<CoroutinePerformer>(InfrastructureAssetPaths.CoroutinePerformerPath);
+
+                return Instantiate(coroutinePerformerPrefab);
             });
         }
+
+        private void RegisterSceneLoader(DIContainer container)
+        {
+            container.RegisterAsSingle<ILoadingCurtain>(c =>
+            {
+                ResourcesAssetLoader resourcesAssetLoader = c.Resolve<ResourcesAssetLoader>();
+
+                StandartLoadingCurtain standartLoadingCurtainPrefab = resourcesAssetLoader.LoadResource<StandartLoadingCurtain>(InfrastructureAssetPaths.StandartLoadingCurtainPath);
+
+                return Instantiate(standartLoadingCurtainPrefab);
+            });
+        }
+
     }
 }
