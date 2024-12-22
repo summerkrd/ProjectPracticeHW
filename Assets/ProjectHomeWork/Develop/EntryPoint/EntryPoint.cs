@@ -1,6 +1,7 @@
 ﻿using Assets.ProjectHomeWork.Develop.CommonServices.AssetsManagment;
 using Assets.ProjectHomeWork.Develop.CommonServices.CoroutinePerformer;
 using Assets.ProjectHomeWork.Develop.CommonServices.LoadingScreen;
+using Assets.ProjectHomeWork.Develop.CommonServices.SceneManagment;
 using Assets.ProjectHomeWork.Develop.DI;
 using System;
 using UnityEngine;
@@ -24,12 +25,12 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             //projectContainer.RegisterAsSingle(c => new ResourcesAssetLoader());
             RegisterResourcesAssetLoader(projectContainer);
             RegisterCoroutinePerformer(projectContainer);
+            RegisterLoadingCurtain(projectContainer);
             RegisterSceneLoader(projectContainer);
 
             //Все регистрации прошли
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
         }
-
 
         private void SetupAppSettings()
         {
@@ -52,7 +53,7 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             });
         }
 
-        private void RegisterSceneLoader(DIContainer container)
+        private void RegisterLoadingCurtain(DIContainer container)
         {
             container.RegisterAsSingle<ILoadingCurtain>(c =>
             {
@@ -64,5 +65,7 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             });
         }
 
+        private void RegisterSceneLoader(DIContainer container)
+            => container.RegisterAsSingle<ISceneLoader>(c => new DefaultSceneLoader());
     }
 }
