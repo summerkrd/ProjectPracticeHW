@@ -27,6 +27,7 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             RegisterCoroutinePerformer(projectContainer);
             RegisterLoadingCurtain(projectContainer);
             RegisterSceneLoader(projectContainer);
+            RegisterSceneSwitcher(projectContainer);
 
             //Все регистрации прошли
             projectContainer.Resolve<ICoroutinePerformer>().StartPerform(_gameBootstrap.Run(projectContainer));
@@ -37,6 +38,13 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = 60;
         }
+
+        private void RegisterSceneSwitcher(DIContainer container)
+            => container.RegisterAsSingle(c => new SceneSwitcher(
+                c.Resolve<ICoroutinePerformer>(), 
+                c.Resolve<ILoadingCurtain>(), 
+                c.Resolve<ISceneLoader>(),
+                c));
 
         private void RegisterResourcesAssetLoader(DIContainer container)
             => container.RegisterAsSingle(c => new ResourcesAssetLoader());

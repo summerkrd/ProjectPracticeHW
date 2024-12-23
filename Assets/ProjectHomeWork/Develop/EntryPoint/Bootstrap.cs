@@ -1,4 +1,5 @@
 ﻿using Assets.ProjectHomeWork.Develop.CommonServices.LoadingScreen;
+using Assets.ProjectHomeWork.Develop.CommonServices.SceneManagment;
 using Assets.ProjectHomeWork.Develop.DI;
 using System.Collections;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
         public IEnumerator Run(DIContainer container)
         {
             ILoadingCurtain loadingCurtain = container.Resolve<ILoadingCurtain>();
+            SceneSwitcher sceneSwitcher = container.Resolve<SceneSwitcher>();
+
             loadingCurtain.Show();
 
             Debug.Log("Начинается инициализация сервисов");
@@ -28,6 +31,8 @@ namespace Assets.ProjectHomeWork.Develop.EntryPoint
             loadingCurtain.Hide();
 
             //переход на следующую сцену с помощью сервиса смены сцен
+
+            sceneSwitcher.ProcessSwitchSceneFor(new OutputBootstrapArgs(new MainMenuInputArgs()));
         }
     }
 }
